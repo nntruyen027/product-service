@@ -1,18 +1,20 @@
 package qbit.entier.product_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-// DTO
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class ProductDto {
     private Long id;
     private String name;
     private String description;
     private BigDecimal basePrice;
+    private List<ProductVersionDto> versions;
 }

@@ -1,8 +1,10 @@
 package qbit.entier.product_service.dto;
 
 import lombok.*;
+import qbit.entier.product_service.entity.ProductImage;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -12,8 +14,9 @@ import java.math.BigDecimal;
 @Setter
 public class ProductVersionDto {
     private Long id;
-    private ProductDto product;
+    private Long productId;
     private String versionName;
     private BigDecimal price;
     private Integer stockQuantity;
+    private List<ProductImage> images;
 }
