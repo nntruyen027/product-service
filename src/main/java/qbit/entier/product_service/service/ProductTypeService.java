@@ -38,7 +38,8 @@ public class ProductTypeService {
     }
 
     public ProductTypeDto createOne(ProductType productType, MultipartFile image) throws IOException {
-        productType.setImage(fileUtil.saveFile(image));
+        if(image != null)
+            productType.setImage(fileUtil.saveFile(image));
         ProductType createdOne = productTypeRepository.save(productType);
         return ProductTypeDto.fromEntity(createdOne);
     }
@@ -69,6 +70,5 @@ public class ProductTypeService {
 
         fileUtil.deleteFile(deleteOne.getImage());
         productTypeRepository.delete(deleteOne);
-
     }
 }

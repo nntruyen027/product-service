@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/product-types/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

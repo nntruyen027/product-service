@@ -1,6 +1,7 @@
 package qbit.entier.product_service.dto;
 
 import lombok.*;
+import qbit.entier.product_service.entity.Attribute;
 
 @AllArgsConstructor
 @Data
