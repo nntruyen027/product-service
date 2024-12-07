@@ -1,6 +1,7 @@
 package qbit.entier.product_service.dto;
 
 import lombok.*;
+import qbit.entier.product_service.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,4 +18,23 @@ public class ProductDto {
     private String description;
     private BigDecimal basePrice;
     private List<ProductVersionDto> versions;
+
+    public static ProductDto fromEntity(Product entity) {
+        return ProductDto.builder()
+                .basePrice(entity.getBasePrice())
+                .description(entity.getDescription())
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
+
+    public static ProductDto fromEntity(Product entity, List<ProductVersionDto> versions) {
+        return ProductDto.builder()
+                .basePrice(entity.getBasePrice())
+                .description(entity.getDescription())
+                .id(entity.getId())
+                .name(entity.getName())
+                .versions(versions)
+                .build();
+    }
 }

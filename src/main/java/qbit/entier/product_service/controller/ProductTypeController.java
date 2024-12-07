@@ -53,6 +53,7 @@ public class ProductTypeController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateOne(@PathVariable Long id,
                                        @RequestParam(value = "name", required = false) String name,
                                        @RequestParam(value ="description", required = false) String description,
@@ -74,6 +75,7 @@ public class ProductTypeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
             productTypeService.deleteOne(id);

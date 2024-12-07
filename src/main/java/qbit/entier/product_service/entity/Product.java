@@ -27,6 +27,10 @@ public class Product {
     @JoinColumn(name = "type_id", nullable = false)
     private ProductType type;
 
+    @ManyToOne
+    @JoinColumn(name = "brand_id", nullable = false)
+    private Brand brand;
+
     @Column(name = "base_price", nullable = false)
     private BigDecimal basePrice;
 

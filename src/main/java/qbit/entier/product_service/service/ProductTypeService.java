@@ -22,9 +22,6 @@ public class ProductTypeService {
     private ProductService productService;
 
     @Autowired
-    private ProductVersionService productVersionService;
-
-    @Autowired
     private FileUtil fileUtil;
 
     public Page<ProductTypeDto> findAll(Pageable pageable) {
@@ -49,7 +46,8 @@ public class ProductTypeService {
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
 
         if(image != null) {
-            fileUtil.deleteFile(updatedOne.getImage());
+            if(updatedOne.getImage() != null)
+                fileUtil.deleteFile(updatedOne.getImage());
             updatedOne.setImage(fileUtil.saveFile(image));
         }
 

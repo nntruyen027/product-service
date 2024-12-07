@@ -26,7 +26,21 @@ public class FileUtil {
             throw new IllegalArgumentException("File is empty");
         }
         String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(UPLOAD_DIR, fileName);
+        if (fileName == null) {
+            throw new IllegalArgumentException("File name is null");
+        }
+
+        Path uploadDir = Paths.get(UPLOAD_DIR);
+
+        Path filePath = uploadDir.resolve(fileName);
+        int counter = 0;
+
+        while (Files.exists(filePath)) {
+            counter++;
+            String newFileName = getNewFileName(fileName, counter);
+            filePath = uploadDir.resolve(newFileName);
+        }
+
         Files.copy(file.getInputStream(), filePath);
         return filePath.toString();
     }
@@ -66,5 +80,23 @@ public class FileUtil {
     public boolean fileExists(String filePath) {
         Path path = Paths.get(filePath);
         return Files.exists(path);
+    }
+
+    /**
+     * Tạo tên file mới bằng cách thêm số thứ tự
+     *
+     * @param originalFileName Tên file gốc
+     * @param counter Số thứ tự
+     * @return Tên file mới
+     */
+    private String getNewFileName(String originalFileName, int counter) {
+        int dotIndex = originalFileName.lastIndexOf(".");
+        if (dotIndex == -1) {
+            // Không có phần mở rộng
+            return originalFileName + "_" + counter;
+        }
+        String name = originalFileName.substring(0, dotIndex);
+        String extension = originalFileName.substring(dotIndex);
+        return name + "_" + counter + extension;
     }
 }

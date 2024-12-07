@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/product-types/**").permitAll()
+                        .requestMatchers("/brands/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
