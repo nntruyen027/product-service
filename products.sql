@@ -124,9 +124,9 @@ CREATE TABLE product_promotions (
 -- product tags (many-to-many relationship)
 CREATE TABLE product_tags (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    product_version_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
-    FOREIGN KEY (product_version_id) REFERENCES product_versions(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 

@@ -17,28 +17,42 @@ public class ProductService {
     @Autowired
     private ProductVersionService productVersionService;
 
+    @Autowired
+    private ProductTagService productTagService;
+
     public Page<ProductDto> getAll(Pageable pageable) {
         return productRepository.findAll(pageable).map(i -> ProductDto
-                .fromEntity(i, productVersionService.getByProductId(i.getId())));
+                .fromEntity(i,
+                        productVersionService.getByProductId(i.getId()),
+                        productTagService.findByProductId(i.getId())));
     }
 
     public Page<ProductDto> getByProductType(Long id, Pageable pageable) {
         return productRepository.findByTypeId(id, pageable).map(i -> ProductDto
-                .fromEntity(i, productVersionService.getByProductId(i.getId())));
+                .fromEntity(i,
+                        productVersionService.getByProductId(i.getId()),
+                        productTagService.findByProductId(i.getId())));
     }
 
     public List<ProductDto> getByProductType(Long id) {
         return productRepository.findByTypeId(id).stream().map(i -> ProductDto
-                .fromEntity(i, productVersionService.getByProductId(i.getId()))).toList();
+                .fromEntity(i,
+                        productVersionService.getByProductId(i.getId()),
+                        productTagService.findByProductId(i.getId()))).toList();
     }
 
     public Page<ProductDto> getByBrand(Long id, Pageable pageable) {
         return productRepository.findByBrandId(id, pageable).map(i -> ProductDto
-                .fromEntity(i, productVersionService.getByProductId(i.getId())));
+                .fromEntity(i,
+                        productVersionService.getByProductId(i.getId()),
+                        productTagService.findByProductId(i.getId())));
     }
 
     public List<ProductDto> getByBrand(Long id) {
         return productRepository.findByBrandId(id).stream().map(i -> ProductDto
-                .fromEntity(i, productVersionService.getByProductId(i.getId()))).toList();
+                .fromEntity(i,
+                        productVersionService.getByProductId(i.getId()),
+                        productTagService.findByProductId(i.getId()))).toList();
     }
+
 }

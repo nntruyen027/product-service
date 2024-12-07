@@ -18,6 +18,7 @@ public class ProductDto {
     private String description;
     private BigDecimal basePrice;
     private List<ProductVersionDto> versions;
+    private List<TagDto> tags;
 
     public static ProductDto fromEntity(Product entity) {
         return ProductDto.builder()
@@ -37,4 +38,17 @@ public class ProductDto {
                 .versions(versions)
                 .build();
     }
+
+    public static ProductDto fromEntity(Product entity, List<ProductVersionDto> versions,
+                                        List<TagDto> tags) {
+        return ProductDto.builder()
+                .basePrice(entity.getBasePrice())
+                .description(entity.getDescription())
+                .id(entity.getId())
+                .name(entity.getName())
+                .versions(versions)
+                .tags(tags)
+                .build();
+    }
+
 }
