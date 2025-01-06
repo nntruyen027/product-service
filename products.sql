@@ -115,9 +115,11 @@ CREATE TABLE product_versions (
 -- product promotion
 CREATE TABLE product_promotions (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    product_version_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
     promotion_id BIGINT NOT NULL,
-    FOREIGN KEY (product_version_id) REFERENCES product_versions(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (promotion_id) REFERENCES promotions(id) ON DELETE CASCADE
 );
 
@@ -126,6 +128,8 @@ CREATE TABLE product_tags (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
