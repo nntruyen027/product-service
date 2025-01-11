@@ -66,7 +66,8 @@ public class ProductTypeService {
         ProductType deleteOne = productTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
 
-        fileUtil.deleteFile(deleteOne.getImage());
+        if(deleteOne.getImage() != null && !deleteOne.getImage().isEmpty())
+            fileUtil.deleteFile(deleteOne.getImage());
         productTypeRepository.delete(deleteOne);
     }
 }

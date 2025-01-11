@@ -9,6 +9,6 @@ import qbit.entier.product_service.dto.AccountDto;
 
 @FeignClient(name = "auth-service", url = "${auth.service.url}", configuration = FeignClientConfig.class)
 public interface AuthServiceClient {
-    @GetMapping(value = "/auth/self")
+    @GetMapping(value = "/self")
     ResponseEntity<AccountDto> getUserByJwt(@RequestHeader("Authorization") String authorizationHeader);
 }
