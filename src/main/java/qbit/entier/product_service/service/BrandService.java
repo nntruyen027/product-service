@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import qbit.entier.product_service.client.FileServerClient;
 import qbit.entier.product_service.dto.BrandDto;
 import qbit.entier.product_service.entity.Brand;
 import qbit.entier.product_service.repository.BrandRepository;
@@ -25,6 +26,9 @@ public class BrandService {
     @Autowired
     private FileUtil fileUtil;
 
+    @Autowired
+    private FileServerClient fileServerClient;
+
     public Page<BrandDto> findAll(Pageable pageable) {
         return brandRepository.findAll(pageable).map(i -> BrandDto
                 .fromEntity(i, productService.getByBrand(i.getId())));
@@ -36,26 +40,20 @@ public class BrandService {
         return BrandDto.fromEntity(brand, productService.getByBrand(brand.getId()));
     }
 
-    public BrandDto createOne(Brand brand, MultipartFile image) throws IOException {
-        if(image != null) {
-            brand.setImage(fileUtil.saveFile(image));
-        }
+    public BrandDto createOne(Brand brand) throws IOException {
         Brand createdBrand = brandRepository.save(brand);
-        return BrandDto.fromEntity(brand);
+        return BrandDto.fromEntity(createdBrand);
     }
 
-    public BrandDto updateOne(Long id, Brand brand, MultipartFile image) throws IOException {
+    public BrandDto updateOne(Long id, Brand brand) throws IOException {
         Brand updatedBrand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
-        if(image != null) {
-            if(updatedBrand.getImage() != null)
-                fileUtil.deleteFile(updatedBrand.getImage());
-            updatedBrand.setImage(fileUtil.saveFile(image));
-        }
         if(brand.getName() != null)
             updatedBrand.setName(brand.getName());
         if(brand.getDescription() != null)
             updatedBrand.setDescription(brand.getDescription());
+        if(brand.getImage() != null)
+            updatedBrand.setImage(brand.getImage());
         return BrandDto.fromEntity(brandRepository.save(updatedBrand));
     }
 
@@ -63,7 +61,8 @@ public class BrandService {
         Brand deletedBrand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
         if(deletedBrand.getImage() != null) {
-            fileUtil.deleteFile(deletedBrand.getImage());
+            String[] paths = deletedBrand.getImage().split("/");
+            fileServerClient.deleteFile(paths[paths.length - 1]);
         }
         brandRepository.delete(deletedBrand);
     }

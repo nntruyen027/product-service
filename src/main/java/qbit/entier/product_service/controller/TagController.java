@@ -41,7 +41,7 @@ public class TagController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOne(Long id, @RequestBody Tag tag) {
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody Tag tag) {
         try {
             return ResponseEntity.ok(tagService.updateTag(id, tag));
         }
@@ -51,7 +51,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOne(Long id) {
+    public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
             tagService.deleteTag(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

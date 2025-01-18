@@ -36,35 +36,18 @@ public class BrandController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> createOne(
-            @RequestParam(value = "name", required = true) String name,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "image", required = false) MultipartFile image
-            ) throws IOException {
-        Brand brand = Brand
-                .builder()
-                .name(name)
-                .description(description)
-                .build();
-
-        return ResponseEntity.ok(brandService.createOne(brand, image));
+    public ResponseEntity<?> createOne(@RequestBody Brand brand) throws IOException {
+        return ResponseEntity.ok(brandService.createOne(brand));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateOne(
             @PathVariable Long id,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "image", required = false) MultipartFile image
+            @RequestBody Brand brand
     ) {
-        Brand brand = Brand
-                .builder()
-                .name(name)
-                .description(description)
-                .build();
         try {
-            return ResponseEntity.ok(brandService.updateOne(id, brand, image));
+            return ResponseEntity.ok(brandService.updateOne(id, brand));
         }
         catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
