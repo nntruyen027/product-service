@@ -38,36 +38,19 @@ public class ProductTypeController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> createOne(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value ="description", required = false) String description,
-                                       @RequestParam(value = "icon", required = false) String icon,
-                                       @RequestParam(value = "image", required = false) MultipartFile image)
+    public ResponseEntity<?> createOne(@RequestBody ProductType productType)
             throws IOException {
         return ResponseEntity
-                .ok(productTypeService.createOne(ProductType
-                        .builder()
-                        .icon(icon)
-                        .name(name)
-                        .description(description)
-                        .build(), image));
+                .ok(productTypeService.createOne(productType));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> updateOne(@PathVariable Long id,
-                                       @RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value ="description", required = false) String description,
-                                       @RequestParam(value = "icon", required = false) String icon,
-                                       @RequestParam(value = "image", required = false) MultipartFile image)
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody ProductType productType)
             throws IOException {
         try {
             return ResponseEntity.ok(productTypeService.updateOne(
-                    id, ProductType
-                            .builder()
-                            .icon(icon)
-                            .name(name)
-                            .description(description)
-                            .build(), image
+                    id, productType
             ));
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

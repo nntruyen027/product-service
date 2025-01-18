@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import qbit.entier.product_service.client.FileServerClient;
 import qbit.entier.product_service.dto.ProductTypeDto;
 import qbit.entier.product_service.entity.ProductType;
 import qbit.entier.product_service.repository.ProductTypeRepository;
@@ -24,6 +25,9 @@ public class ProductTypeService {
     @Autowired
     private FileUtil fileUtil;
 
+    @Autowired
+    private FileServerClient fileServerClient;
+
     public Page<ProductTypeDto> findAll(Pageable pageable) {
         return productTypeRepository.findAll(pageable).map(i ->
                 ProductTypeDto.fromEntity(i, productService.getByProductType(i.getId())));
@@ -34,22 +38,14 @@ public class ProductTypeService {
         return ProductTypeDto.fromEntity(type, productService.getByProductType(type.getId()));
     }
 
-    public ProductTypeDto createOne(ProductType productType, MultipartFile image) throws IOException {
-        if(image != null)
-            productType.setImage(fileUtil.saveFile(image));
+    public ProductTypeDto createOne(ProductType productType) throws IOException {
         ProductType createdOne = productTypeRepository.save(productType);
         return ProductTypeDto.fromEntity(createdOne);
     }
 
-    public ProductTypeDto updateOne(Long id, ProductType one, MultipartFile image) throws IOException {
+    public ProductTypeDto updateOne(Long id, ProductType one) throws IOException {
         ProductType updatedOne = productTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
-
-        if(image != null) {
-            if(updatedOne.getImage() != null)
-                fileUtil.deleteFile(updatedOne.getImage());
-            updatedOne.setImage(fileUtil.saveFile(image));
-        }
 
         if(one.getName() != null)
             updatedOne.setName(one.getName());
@@ -57,6 +53,8 @@ public class ProductTypeService {
             updatedOne.setIcon(one.getIcon());
         if(one.getDescription() != null)
             updatedOne.setDescription(one.getDescription());
+        if(one.getImage() != null)
+            updatedOne.setImage(one.getImage());
 
         productTypeRepository.save(updatedOne);
         return ProductTypeDto.fromEntity(updatedOne);
@@ -66,8 +64,11 @@ public class ProductTypeService {
         ProductType deleteOne = productTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found"));
 
-        if(deleteOne.getImage() != null && !deleteOne.getImage().isEmpty())
-            fileUtil.deleteFile(deleteOne.getImage());
+        if(deleteOne.getImage() != null ) {
+            String[] parts = deleteOne.getImage().split("/");
+            fileServerClient.deleteFile(parts[parts.length - 1]);
+        }
+
         productTypeRepository.delete(deleteOne);
     }
 }
