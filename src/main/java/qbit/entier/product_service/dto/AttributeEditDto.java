@@ -9,18 +9,18 @@ import qbit.entier.product_service.entity.Attribute;
 @Builder
 @Getter
 @Setter
-public class AttributeDto {
+public class AttributeEditDto {
     private Long id;
     private String name;
     private String description;
-    private AttributeTypeDto type;
+    private Long type;
 
-    public static AttributeDto fromEntity(Attribute entity) {
-        return AttributeDto.builder()
+    public static AttributeEditDto fromEntity(Attribute entity) {
+        return AttributeEditDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .type(AttributeTypeDto.fromEntity(entity.getType()))
+                .type(entity.getType().getId())
                 .build();
     }
 }

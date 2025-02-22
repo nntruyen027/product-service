@@ -24,9 +24,6 @@ public class BrandService {
     private ProductService productService;
 
     @Autowired
-    private FileUtil fileUtil;
-
-    @Autowired
     private FileServerClient fileServerClient;
 
     public Page<BrandDto> findAll(Pageable pageable) {
