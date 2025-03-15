@@ -9,21 +9,21 @@ import qbit.entier.product_service.entity.AttributeValue;
 @Setter
 @NoArgsConstructor
 @Builder
-public class AttributeValueDto {
+public class AttributeValueEditDto {
     private Long id;
 
     private String name;
 
     private String description;
 
-    private AttributeDto attribute;
+    private Long attribute;
 
-    public static AttributeValueDto fromEntity(AttributeValue entity) {
-        return AttributeValueDto.builder()
+    public static AttributeValueEditDto fromEntity(AttributeValue entity) {
+        return AttributeValueEditDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .attribute(AttributeDto.fromEntity(entity.getAttribute()))
+                .attribute(entity.getAttribute().getId())
                 .build();
     }
 }

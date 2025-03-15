@@ -2,6 +2,7 @@ package qbit.entier.product_service.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +33,10 @@ public class Product {
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
-    @Column(name = "base_price", nullable = false)
-    private BigDecimal basePrice;
+    @Column(nullable = false)
+    private Boolean isOpened = true;
+
+    private String image;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

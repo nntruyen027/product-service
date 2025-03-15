@@ -1,9 +1,9 @@
 package qbit.entier.product_service.dto;
 
 import lombok.*;
+import qbit.entier.product_service.entity.Brand;
 import qbit.entier.product_service.entity.Product;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -12,54 +12,49 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ProductDto {
+public class ProductEditDto {
     private Long id;
     private String name;
     private String description;
-    private List<ProductVersionDto> versions;
-    private List<TagDto> tags;
+    private Long type;
+    private Long brand;
     private String image;
     private Boolean isOpened;
-    private BrandDto brand;
-    private ProductTypeDto type;
 
-    public static ProductDto fromEntity(Product entity) {
-        return ProductDto.builder()
+    public static ProductEditDto fromEntity(Product entity) {
+        return ProductEditDto.builder()
                 .description(entity.getDescription())
                 .id(entity.getId())
                 .name(entity.getName())
+                .type(entity.getType().getId())
+                .brand(entity.getBrand().getId())
                 .image(entity.getImage())
                 .isOpened(entity.getIsOpened())
-                .brand(BrandDto.fromEntity(entity.getBrand()))
-                .type(ProductTypeDto.fromEntity(entity.getType()))
                 .build();
     }
 
-    public static ProductDto fromEntity(Product entity, List<ProductVersionDto> versions) {
-        return ProductDto.builder()
+    public static ProductEditDto fromEntity(Product entity, List<ProductVersionDto> versions) {
+        return ProductEditDto.builder()
                 .description(entity.getDescription())
                 .id(entity.getId())
                 .name(entity.getName())
-                .versions(versions)
+                .type(entity.getType().getId())
+                .brand(entity.getBrand().getId())
                 .image(entity.getImage())
                 .isOpened(entity.getIsOpened())
-                .brand(BrandDto.fromEntity(entity.getBrand()))
-                .type(ProductTypeDto.fromEntity(entity.getType()))
                 .build();
     }
 
-    public static ProductDto fromEntity(Product entity, List<ProductVersionDto> versions,
-                                        List<TagDto> tags) {
-        return ProductDto.builder()
+    public static ProductEditDto fromEntity(Product entity, List<ProductVersionDto> versions,
+                                            List<TagDto> tags) {
+        return ProductEditDto.builder()
                 .description(entity.getDescription())
                 .id(entity.getId())
                 .name(entity.getName())
-                .versions(versions)
-                .tags(tags)
+                .type(entity.getType().getId())
+                .brand(entity.getBrand().getId())
                 .image(entity.getImage())
                 .isOpened(entity.getIsOpened())
-                .brand(BrandDto.fromEntity(entity.getBrand()))
-                .type(ProductTypeDto.fromEntity(entity.getType()))
                 .build();
     }
 

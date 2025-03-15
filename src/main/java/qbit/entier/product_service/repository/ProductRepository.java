@@ -10,8 +10,9 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findByTypeId(Long id, Pageable pageable);
-    List<Product> findByTypeId(Long id);
-    Page<Product> findByBrandId(Long id, Pageable pageable);
-    List<Product> findByBrandId(Long id);
+    Page<Product> findByTypeIdAndIsOpenedTrue(Long id, Pageable pageable);
+    List<Product> findByTypeIdAndIsOpenedTrue(Long id);
+    Page<Product> findByBrandIdAndIsOpenedTrue(Long id, Pageable pageable);
+    List<Product> findByBrandIdAndIsOpenedTrue(Long id);
+    Page<Product> findByIsOpenedTrue(Pageable pageable);
 }
