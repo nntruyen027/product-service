@@ -7,33 +7,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import qbit.entier.product_service.dto.AssignTagDto;
 import qbit.entier.product_service.dto.ProductDto;
 import qbit.entier.product_service.dto.ProductEditDto;
+import qbit.entier.product_service.dto.ProductVersionDto;
+import qbit.entier.product_service.dto.ProductVersionEditDto;
 import qbit.entier.product_service.service.ProductService;
-import qbit.entier.product_service.service.ProductTagService;
+import qbit.entier.product_service.service.ProductVersionService;
 
 import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/products")
-public class ProductController {
+@RequestMapping("products/{productId}/versions")
+public class ProductVersionController {
     @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private ProductTagService productTagService;
+    private ProductVersionService productVersionService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAll(Pageable pageable) {
-        return ResponseEntity.ok(productService.findAll(pageable));
+    public ResponseEntity<?> getAllByProduct(@PathVariable Long productId, Pageable pageable) {
+        return ResponseEntity.ok(productVersionService.getByProductId(productId, pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
-            ProductDto result = productService.findById(id);
+            ProductVersionDto result = productVersionService.findById(id);
             return ResponseEntity.ok(result);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -42,18 +40,18 @@ public class ProductController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> createOne(@RequestBody ProductEditDto product)
+    public ResponseEntity<?> createOne(@RequestBody ProductVersionEditDto product)
             throws IOException {
         return ResponseEntity
-                .ok(productService.createOne(product));
+                .ok(productVersionService.createOne(product));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody ProductEditDto product)
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody ProductVersionEditDto product)
             throws IOException {
         try {
-            return ResponseEntity.ok(productService.updateOne(
+            return ResponseEntity.ok(productVersionService.updateOne(
                     id, product
             ));
         } catch (EntityNotFoundException ex) {
@@ -61,28 +59,11 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{id}/tags")
-    @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> assignTags(@PathVariable Long id, @RequestBody AssignTagDto tags) {
-        try {
-            return ResponseEntity.ok(productTagService.assignTagToProduct(
-                    id, tags.getTags()
-            ));
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-    }
-
-    @GetMapping("/{id}/tags")
-    public ResponseEntity<?> getTags(@PathVariable Long id) {
-        return ResponseEntity.ok(productTagService.findByProductId(id));
-    }
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
-            productService.deleteOne(id);
+            productVersionService.deleteOne(id);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
