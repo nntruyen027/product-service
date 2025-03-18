@@ -37,7 +37,7 @@ public class ProductTypeController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('admin')")
+
     public ResponseEntity<?> createOne(@RequestBody ProductType productType)
             throws IOException {
         return ResponseEntity

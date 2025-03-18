@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/attribute-types")
-@PreAuthorize("hasRole('admin')")
 public class AttributeTypeController {
     @Autowired
     private AttributeTypeService typeService;
@@ -38,11 +37,13 @@ public class AttributeTypeController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createOne(@RequestBody AttributeType type) {
         return ResponseEntity.ok(typeService.createType(type));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody AttributeType type) {
         try {
             return ResponseEntity.ok(typeService.updateType(id, type));
@@ -53,6 +54,7 @@ public class AttributeTypeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
             typeService.deleteType(id);

@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/attributes")
-@PreAuthorize("hasRole('admin')")
 public class AttributeController {
     @Autowired
     private AttributeService attributeService;
@@ -44,11 +43,13 @@ public class AttributeController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createOne(@RequestBody AttributeEditDto one) {
         return ResponseEntity.ok(attributeService.createOne(one));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody AttributeEditDto one) {
         try {
             return ResponseEntity.ok(attributeService.updateOne(id, one));
@@ -59,6 +60,7 @@ public class AttributeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
             attributeService.deleteOne(id);

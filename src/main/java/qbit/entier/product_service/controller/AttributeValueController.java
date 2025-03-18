@@ -41,11 +41,13 @@ public class AttributeValueController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createOne(@RequestBody AttributeValueEditDto one) {
         return ResponseEntity.ok(attributeValueService.createOne(one));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody AttributeValueEditDto one) {
         try {
             return ResponseEntity.ok(attributeValueService.updateOne(id, one));
@@ -56,6 +58,7 @@ public class AttributeValueController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {
         try {
             attributeValueService.deleteOne(id);
