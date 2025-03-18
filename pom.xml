@@ -115,7 +115,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>qbit.entier.user_service.UserServiceApplication</mainClass>
+					<mainClass>qbit.entier.product_service.ProductServiceApplication</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
