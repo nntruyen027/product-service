@@ -59,6 +59,36 @@ public class ProductVersionController {
         }
     }
 
+    @PutMapping("/{id}/add/${quantity}")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<?> addItems(@PathVariable Long id, @PathVariable int quantity)
+            throws IOException {
+        try {
+            return ResponseEntity.ok(productVersionService.addItem(
+                    id, quantity
+            ));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/{id}/remove/${quantity}")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<?> removeItems(@PathVariable Long id, @PathVariable int quantity)
+            throws IOException {
+        try {
+            return ResponseEntity.ok(productVersionService.subtractItem(
+                    id, quantity
+            ));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> deleteOne(@PathVariable Long id) {

@@ -101,6 +101,7 @@ public class ProductVersionService {
             throw new Exception("Invalid value");
         }
         productVersion.setStockQuantity(productVersion.getStockQuantity() + quantity);
+
         return ProductVersionDto.fromEntity(productVersionRepository.save(productVersion));
     }
 
