@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import qbit.entier.product_service.dto.AssignTagDto;
+import qbit.entier.product_service.dto.ProductAttributeEditDto;
 import qbit.entier.product_service.dto.ProductDto;
 import qbit.entier.product_service.dto.ProductEditDto;
 import qbit.entier.product_service.service.ProductService;
@@ -90,4 +91,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{id}/attributes")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<?> assignAttribute(@PathVariable Long id, @RequestBody ProductAttributeEditDto ids) {
+        try {
+            return ResponseEntity.ok(productService.updateAttributeValues(id, ids.getIds()));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 }

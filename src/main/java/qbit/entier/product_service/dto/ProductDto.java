@@ -22,6 +22,7 @@ public class ProductDto {
     private Boolean isOpened;
     private BrandDto brand;
     private ProductTypeDto type;
+    private List<AttributeValueDto> attributeValues;
 
     public static ProductDto fromEntity(Product entity) {
         return ProductDto.builder()
@@ -60,6 +61,22 @@ public class ProductDto {
                 .isOpened(entity.getIsOpened())
                 .brand(BrandDto.fromEntity(entity.getBrand()))
                 .type(ProductTypeDto.fromEntity(entity.getType()))
+                .build();
+    }
+
+    public static ProductDto fromEntity(Product entity, List<ProductVersionDto> versions,
+                                        List<TagDto> tags, List<AttributeValueDto> attributeValues) {
+        return ProductDto.builder()
+                .description(entity.getDescription())
+                .id(entity.getId())
+                .name(entity.getName())
+                .versions(versions)
+                .tags(tags)
+                .image(entity.getImage())
+                .isOpened(entity.getIsOpened())
+                .brand(BrandDto.fromEntity(entity.getBrand()))
+                .type(ProductTypeDto.fromEntity(entity.getType()))
+                .attributeValues(attributeValues)
                 .build();
     }
 

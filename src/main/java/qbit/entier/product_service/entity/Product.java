@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -23,6 +24,8 @@ public class Product {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @ManyToOne
@@ -37,6 +40,7 @@ public class Product {
     private Boolean isOpened = true;
 
     private String image;
+
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

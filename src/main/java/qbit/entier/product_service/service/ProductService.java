@@ -6,16 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import qbit.entier.product_service.client.FileServerClient;
+import qbit.entier.product_service.dto.AttributeValueDto;
+import qbit.entier.product_service.dto.ProductAttributeEditDto;
 import qbit.entier.product_service.dto.ProductDto;
 import qbit.entier.product_service.dto.ProductEditDto;
-import qbit.entier.product_service.entity.Brand;
-import qbit.entier.product_service.entity.Product;
-import qbit.entier.product_service.entity.ProductType;
-import qbit.entier.product_service.repository.BrandRepository;
-import qbit.entier.product_service.repository.ProductRepository;
-import qbit.entier.product_service.repository.ProductTypeRepository;
+import qbit.entier.product_service.entity.*;
+import qbit.entier.product_service.repository.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -35,6 +35,12 @@ public class ProductService {
 
     @Autowired
     private FileServerClient fileServerClient;
+
+    @Autowired
+    private ProductAttributeValueRepository productAttributeValueRepository;
+
+    @Autowired
+    private AttributeValueRepository attributeValueRepository;
 
 
 
@@ -74,7 +80,10 @@ public class ProductService {
     }
 
     public ProductDto findById(Long id) {
-        return ProductDto.fromEntity(productRepository.findById(id).orElseThrow(() ->  new EntityNotFoundException("Not found")));
+        List<AttributeValueDto> attributeValueDto = this.findAttributes(id);
+
+        return ProductDto.fromEntity(productRepository.findById(id).orElseThrow(() ->  new EntityNotFoundException("Not found")),
+                productVersionService.getByProductId(id), productTagService.findByProductId(id), attributeValueDto);
     }
 
     public ProductDto createOne(ProductEditDto product) {
@@ -126,7 +135,34 @@ public class ProductService {
             fileServerClient.deleteFile(parts[parts.length - 1]);
         }
         deletedProduct.setIsOpened(false);
+        productAttributeValueRepository.deleteByProductId(id);
         productRepository.save(deletedProduct);
+    }
+
+    public List<AttributeValueDto> findAttributes(Long productId) {
+        return productAttributeValueRepository.findByProductId(productId).stream().map(e -> AttributeValueDto.fromEntity(e.getAttributeValue()))
+                .toList();
+    }
+
+    public ProductDto updateAttributeValues(Long productId, List<Long> attributes) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Không có product"));
+        productAttributeValueRepository.deleteByProductId(productId);
+
+        List<AttributeValueDto> result = new ArrayList<>();
+        for(Long id : attributes) {
+            Optional<AttributeValue> attributeValue = attributeValueRepository.findById(id);
+            if(attributeValue.isEmpty()) {
+                continue;
+            }
+            else {
+                ProductAttributeValue value = new ProductAttributeValue();
+                value.setAttributeValue(attributeValue.get());
+                value.setProduct(product);
+                result.add(AttributeValueDto.fromEntity(productAttributeValueRepository.save(value).getAttributeValue()));
+            }
+        }
+
+        return findById(productId);
     }
 
 }

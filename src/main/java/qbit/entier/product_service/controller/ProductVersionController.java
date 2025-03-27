@@ -59,11 +59,12 @@ public class ProductVersionController {
         }
     }
 
-    @PutMapping("/{id}/add/${quantity}")
+    @PutMapping("/{id}/add/{quantity}")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> addItems(@PathVariable Long id, @PathVariable int quantity)
+    public ResponseEntity<?> addItems(@PathVariable Long id, @PathVariable(required = false) Integer quantity)
             throws IOException {
         try {
+            quantity = quantity != null ? quantity : 0;
             return ResponseEntity.ok(productVersionService.addItem(
                     id, quantity
             ));
@@ -74,11 +75,12 @@ public class ProductVersionController {
         }
     }
 
-    @PutMapping("/{id}/remove/${quantity}")
+    @PutMapping("/{id}/remove/{quantity}")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> removeItems(@PathVariable Long id, @PathVariable int quantity)
+    public ResponseEntity<?> removeItems(@PathVariable Long id, @PathVariable(required = false) Integer quantity)
             throws IOException {
         try {
+            quantity = quantity != null ? quantity : 0;
             return ResponseEntity.ok(productVersionService.subtractItem(
                     id, quantity
             ));
